@@ -14,12 +14,11 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
-    deltaTime = selectedDates[0] - Date.now();
-    if (deltaTime <= 0) {
+    if (selectedDates[0] - Date.now() <= 0) {
       Notify.failure('Please choose a date in the future');
-      deltaTime = 0;
       return;
     }
+    deltaTime = selectedDates[0] - Date.now();
   },
 };
 
