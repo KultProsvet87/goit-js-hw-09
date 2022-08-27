@@ -9,12 +9,12 @@ refs.form.addEventListener('submit', onFormSubmit);
 function onFormSubmit(e) {
   e.preventDefault();
 
-  let totalDelay = Number(e.currentTarget.elements['delay'].value);
-  const stepDelay = Number(e.currentTarget.elements['step'].value);
-  const amount = Number(e.currentTarget.elements['amount'].value);
+  let totalDelay = Number(e.currentTarget.elements.delay.value);
+  const stepDelay = Number(e.currentTarget.elements.step.value);
+  const amount = Number(e.currentTarget.elements.amount.value);
 
-  if (totalDelay < 0 || stepDelay < 0 || amount < 0) {
-    Notify.failure('Все значения должны быть больше 0');
+  if (totalDelay <= 0 || stepDelay < 0 || amount <= 0) {
+    Notify.failure('First delay и Amount должны быть больше 0');
     return;
   }
 
@@ -28,7 +28,6 @@ function onFormSubmit(e) {
         Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
     totalDelay += stepDelay;
-    console.log(i, totalDelay);
   }
   e.currentTarget.reset();
 }

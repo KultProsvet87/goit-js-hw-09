@@ -7,6 +7,14 @@ let deltaTime = 0;
 let active = false;
 const DELAY = 1000;
 
+const refs = {
+  daysEl: document.querySelector('[data-days]'),
+  hoursEl: document.querySelector('[data-hours]'),
+  minutsEl: document.querySelector('[data-minutes]'),
+  secondsEl: document.querySelector('[data-seconds]'),
+  startBtn: document.querySelector('[data-start]'),
+};
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -19,29 +27,15 @@ const options = {
       return;
     }
     deltaTime = selectedDates[0] - Date.now();
+    refs.startBtn.disabled = !refs.startBtn.disabled;
   },
 };
 
 const calendar = flatpickr('#datetime-picker', options);
 
-const refs = {
-  daysEl: document.querySelector('[data-days]'),
-  hoursEl: document.querySelector('[data-hours]'),
-  minutsEl: document.querySelector('[data-minutes]'),
-  secondsEl: document.querySelector('[data-seconds]'),
-  startBtn: document.querySelector('[data-start]'),
-};
-
 refs.startBtn.addEventListener('click', onStartBtnClick);
 
 function onStartBtnClick() {
-  if (deltaTime === 0) {
-    Notify.failure('Please choose a date in the future');
-    return;
-  }
-  if (active) return;
-  active = !active;
-
   const interval = setInterval(() => {
     chengTimer(convertMs(deltaTime));
     deltaTime -= DELAY;
@@ -49,10 +43,11 @@ function onStartBtnClick() {
     if (deltaTime <= 0) {
       clearInterval(interval);
       deltaTime = 0;
-      active = !active;
+      Notify.success('Success');
       return;
     }
   }, DELAY);
+  refs.startBtn.disabled = !refs.startBtn.disabled;
 }
 
 function convertMs(ms) {
