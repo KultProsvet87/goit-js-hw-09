@@ -13,6 +13,7 @@ const refs = {
   minutsEl: document.querySelector('[data-minutes]'),
   secondsEl: document.querySelector('[data-seconds]'),
   startBtn: document.querySelector('[data-start]'),
+  calendar: document.querySelector('#datetime-picker'),
 };
 
 const options = {
@@ -31,23 +32,25 @@ const options = {
   },
 };
 
-const calendar = flatpickr('#datetime-picker', options);
+const calendar = flatpickr(refs.calendar, options);
 
 refs.startBtn.addEventListener('click', onStartBtnClick);
 
 function onStartBtnClick() {
   const interval = setInterval(() => {
-    chengTimer(convertMs(deltaTime));
+    changeTimer(convertMs(deltaTime));
     deltaTime -= DELAY;
 
     if (deltaTime <= 0) {
       clearInterval(interval);
       deltaTime = 0;
       Notify.success('Success');
+      refs.calendar.disabled = false;
       return;
     }
   }, DELAY);
   refs.startBtn.disabled = !refs.startBtn.disabled;
+  refs.calendar.disabled = true;
 }
 
 function convertMs(ms) {
@@ -64,7 +67,7 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-function chengTimer({ days, hours, minutes, seconds }) {
+function changeTimer({ days, hours, minutes, seconds }) {
   refs.daysEl.textContent = days;
   refs.hoursEl.textContent = hours;
   refs.minutsEl.textContent = minutes;
